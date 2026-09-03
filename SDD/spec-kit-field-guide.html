@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spec-Kit — A Blueprint Reading for Newbies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0a1929;
+    --bg-2: #0d2038;
+    --panel: #0f2440;
+    --panel-2: #142d4f;
+    --line: #1e3a5f;
+    --line-soft: #16304f;
+    --cyan: #5ec8e8;
+    --cyan-bright: #9fe6ff;
+    --brass: #d4af37;
+    --brass-soft: #e6cc7a;
+    --paper: #eaf2fa;
+    --dim: #7f9cbf;
+    --dim-2: #4d6a8c;
+    --code-bg: #061422;
+    --danger: #e8845e;
+    --radius: 3px;
+  }
+
+  *{ box-sizing: border-box; }
+
+  html{ scroll-behavior: smooth; }
+
+  body{
+    margin: 0;
+    background:
+      linear-gradient(var(--line-soft) 1px, transparent 1px) 0 0/48px 48px,
+      linear-gradient(90deg, var(--line-soft) 1px, transparent 1px) 0 0/48px 48px,
+      var(--bg);
+    color: var(--paper);
+    font-family: 'IBM Plex Sans', sans-serif;
+    line-height: 1.65;
+  }
+
+  ::selection{ background: var(--brass); color: #0a1929; }
+
+  h1,h2,h3,h4{
+    font-family: 'Big Shoulders Display', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    font-weight: 700;
+    color: var(--paper);
+    margin: 0;
+  }
+
+  code, .mono{ font-family: 'IBM Plex Mono', monospace; }
+
+  a{ color: var(--cyan-bright); }
+
+  /* ---------- LAYOUT ---------- */
+  .app{ display: flex; min-height: 100vh; }
+
+  .sidebar{
+    width: 280px;
+    flex-shrink: 0;
+    background: linear-gradient(180deg, #081625, #0a1929);
+    border-right: 1px solid var(--line);
+    padding: 28px 0 60px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+
+  .sidebar::-webkit-scrollbar{ width: 6px; }
+  .sidebar::-webkit-scrollbar-thumb{ background: var(--line); border-radius: 4px; }
+
+  .sidebar-brand{
+    padding: 0 22px 20px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 18px;
+  }
+
+  .sidebar-brand .mark{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--brass-soft);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .sidebar-brand h1{
+    font-size: 26px;
+    margin-top: 8px;
+    line-height: 1;
+  }
+
+  .sidebar-brand p{
+    color: var(--dim);
+    font-size: 12px;
+    margin: 8px 0 0;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .nav-group{ margin-bottom: 6px; }
+
+  .nav-group-label{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--dim-2);
+    padding: 14px 22px 6px;
+  }
+
+  .nav-link{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 22px;
+    font-size: 13.5px;
+    color: var(--dim);
+    text-decoration: none;
+    border-left: 2px solid transparent;
+    transition: all .15s ease;
+  }
+
+  .nav-link .n{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--dim-2);
+    width: 18px;
+  }
+
+  .nav-link:hover{ color: var(--paper); background: rgba(94,200,232,0.06); }
+
+  .nav-link.active{
+    color: var(--cyan-bright);
+    border-left-color: var(--cyan);
+    background: rgba(94,200,232,0.08);
+  }
+
+  .main{ flex: 1; min-width: 0; }
+
+  .wrap{ max-width: 880px; margin: 0 auto; padding: 64px 40px 120px; }
+
+  section{ scroll-margin-top: 30px; }
+
+  /* ---------- HERO ---------- */
+  .titleblock{
+    border: 1px solid var(--line);
+    background: var(--panel);
+    padding: 30px 34px;
+    margin-bottom: 8px;
+    position: relative;
+  }
+
+  .titleblock::before{
+    content: "";
+    position: absolute; inset: 6px;
+    border: 1px solid var(--line-soft);
+    pointer-events: none;
+  }
+
+  .titleblock .eyebrow{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    color: var(--brass-soft);
+    text-transform: uppercase;
+  }
+
+  .titleblock h1{
+    font-size: 52px;
+    margin: 10px 0 4px;
+    color: var(--paper);
+  }
+
+  .titleblock .sub{
+    font-size: 17px;
+    color: var(--dim);
+    max-width: 60ch;
+    font-weight: 400;
+    font-family: 'IBM Plex Sans', sans-serif;
+    text-transform: none;
+    letter-spacing: normal;
+  }
+
+  .titleblock-meta{
+    display: flex;
+    gap: 28px;
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+    flex-wrap: wrap;
+  }
+
+  .titleblock-meta div{ font-family: 'IBM Plex Mono', monospace; font-size: 11px; }
+  .titleblock-meta .k{ color: var(--dim-2); letter-spacing: 0.08em; text-transform: uppercase; display:block; margin-bottom:3px;}
+  .titleblock-meta .v{ color: var(--cyan-bright); }
+
+  .lede{
+    font-size: 16px;
+    color: var(--paper);
+    margin: 34px 0;
+    line-height: 1.75;
+  }
+
+  .lede strong{ color: var(--cyan-bright); font-weight: 600; }
+
+  /* translation table */
+  .xlat{
+    width: 100%;
+    border-collapse: collapse;
+    margin: 28px 0 40px;
+    font-size: 13.5px;
+  }
+  .xlat caption{
+    text-align: left;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--brass-soft);
+    margin-bottom: 10px;
+  }
+  .xlat th{
+    text-align: left;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dim-2);
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--line);
+  }
+  .xlat td{
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--line-soft);
+    color: var(--dim);
+    vertical-align: top;
+  }
+  .xlat td.term{ color: var(--paper); font-weight: 600; white-space: nowrap; }
+  .xlat td.code{ color: var(--cyan-bright); font-family: 'IBM Plex Mono', monospace; white-space: nowrap; }
+  .xlat tr:last-child td{ border-bottom: none; }
+
+  /* ---------- PHASE HEADERS ---------- */
+  .phase{ margin: 76px 0 0; }
+
+  .phase-head{
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 22px;
+  }
+
+  .phase-icon{
+    width: 46px; height: 46px;
+    border: 1px solid var(--line);
+    background: var(--panel);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .phase-icon svg{ width: 24px; height: 24px; }
+
+  .phase-head .tag{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--dim-2);
+    display: block;
+    margin-bottom: 3px;
+  }
+
+  .phase-head h2{ font-size: 30px; color: var(--paper); }
+
+  .phase-intro{ color: var(--dim); font-size: 15px; margin: 0 0 26px; max-width: 68ch; }
+
+  /* ---------- CONTENT BLOCKS ---------- */
+  .block{ margin: 0 0 18px; border: 1px solid var(--line); background: var(--panel); }
+
+  .block-label{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .block-body{ padding: 18px 20px 22px; font-size: 14.5px; color: var(--paper); }
+  .block-body p{ margin: 0 0 12px; }
+  .block-body p:last-child{ margin-bottom: 0; }
+  .block-body ul, .block-body ol{ margin: 8px 0 12px; padding-left: 20px; color: var(--paper); }
+  .block-body li{ margin-bottom: 6px; }
+
+  .block.analogy{ background: linear-gradient(180deg, rgba(212,175,55,0.06), var(--panel)); border-color: #3a3020; }
+  .block.analogy .block-label{ color: var(--brass-soft); border-bottom-color: #3a3020; background: rgba(212,175,55,0.05); }
+  .block.analogy .block-body{ color: var(--paper); font-style: normal; }
+  .block.analogy .block-body p:first-child{ font-size: 15px; }
+
+  .block.concept .block-label{ color: var(--cyan-bright); }
+  .block.concept .block-body strong{ color: var(--cyan-bright); }
+
+  .block.code .block-label{ color: var(--dim); background: #050f1c; }
+  .block.code .block-body{ padding: 0; }
+
+  .block.tech .block-label{ color: #a8b8cc; }
+  .block.tech .block-body{ color: var(--dim); }
+  .block.tech .block-body strong{ color: var(--paper); }
+  .block.tech .block-body code{ color: var(--cyan-bright); background: rgba(94,200,232,0.08); padding: 1px 5px; border-radius: 2px; font-size: 13px; }
+
+  pre{
+    margin: 0;
+    background: var(--code-bg);
+    padding: 16px 20px;
+    overflow-x: auto;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #cfe8f5;
+  }
+  pre .cmt{ color: var(--dim-2); }
+  pre .cmd{ color: var(--brass-soft); }
+  pre .str{ color: #9fd8a8; }
+  pre .out{ color: var(--dim); }
+
+  .filetree{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: var(--dim);
+    background: var(--code-bg);
+    padding: 16px 20px;
+    line-height: 1.75;
+    white-space: pre;
+    overflow-x: auto;
+  }
+  .filetree .hl{ color: var(--cyan-bright); }
+  .filetree .hl2{ color: var(--brass-soft); }
+
+  /* callouts */
+  .callout{
+    border-left: 3px solid var(--cyan);
+    background: rgba(94,200,232,0.05);
+    padding: 12px 16px;
+    font-size: 13.5px;
+    color: var(--dim);
+    margin: 16px 0 0;
+  }
+  .callout strong{ color: var(--paper); }
+  .callout.warn{ border-left-color: var(--danger); background: rgba(232,132,94,0.06); }
+
+  /* cheat sheet table */
+  .cheatsheet{ width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  .cheatsheet th{
+    text-align: left; padding: 10px 14px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--dim-2); border-bottom: 1px solid var(--line);
+  }
+  .cheatsheet td{ padding: 12px 14px; border-bottom: 1px solid var(--line-soft); color: var(--dim); vertical-align: top; }
+  .cheatsheet td.cmd{ color: var(--cyan-bright); font-family: 'IBM Plex Mono', monospace; white-space: nowrap; }
+  .cheatsheet td.an{ color: var(--brass-soft); }
+  .cheatsheet tr:last-child td{ border-bottom: none; }
+  .cheatsheet tr:hover td{ background: rgba(94,200,232,0.04); }
+
+  /* section dividers / small caps */
+  .divider{
+    display: flex; align-items: center; gap: 14px;
+    margin: 90px 0 30px;
+    color: var(--dim-2);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+  }
+  .divider::before, .divider::after{ content:""; flex:1; height:1px; background: var(--line); }
+
+  .grid2{ display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 640px){ .grid2{ grid-template-columns: 1fr; } }
+
+  .stackline{
+    border: 1px dashed var(--line);
+    padding: 14px 18px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    color: var(--dim);
+    margin: 16px 0;
+  }
+  .stackline .row{ display:flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px dotted var(--line-soft); }
+  .stackline .row:last-child{ border-bottom: none; }
+  .stackline .p{ color: var(--brass-soft); }
+
+  .walkthrough-step{
+    display: flex; gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .walkthrough-step:last-child{ border-bottom: none; }
+  .walkthrough-step .num{
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-size: 26px; color: var(--line); width: 40px; flex-shrink: 0; font-weight: 700;
+  }
+  .walkthrough-step .body h4{ font-size: 15px; color: var(--cyan-bright); text-transform: none; letter-spacing: normal; margin-bottom: 4px; }
+  .walkthrough-step .body p{ color: var(--dim); font-size: 13.5px; margin: 0 0 8px; }
+  .walkthrough-step .body code{ font-family: 'IBM Plex Mono', monospace; color: var(--paper); background: var(--code-bg); padding: 1px 6px; font-size: 12.5px; }
+
+  footer{
+    border-top: 1px solid var(--line);
+    margin-top: 100px;
+    padding-top: 30px;
+    color: var(--dim-2);
+    font-size: 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    text-align: center;
+  }
+
+  @media (max-width: 900px){
+    .sidebar{ display: none; }
+    .wrap{ padding: 40px 20px 80px; }
+    .titleblock h1{ font-size: 36px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <span class="mark">◈ FIELD GUIDE</span>
+      <h1>Spec&#8209;Kit</h1>
+      <p>drawn as a blueprint, rev. 1</p>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">Foundations</div>
+      <a class="nav-link" href="#big-picture"><span class="n">00</span>The Big Picture</a>
+      <a class="nav-link" href="#anatomy"><span class="n">01</span>Anatomy of the Toolkit</a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">The Core Pipeline</div>
+      <a class="nav-link" href="#constitution"><span class="n">02</span>Constitution</a>
+      <a class="nav-link" href="#specify"><span class="n">03</span>Specify</a>
+      <a class="nav-link" href="#clarify"><span class="n">04</span>Clarify</a>
+      <a class="nav-link" href="#plan"><span class="n">05</span>Plan</a>
+      <a class="nav-link" href="#tasks"><span class="n">06</span>Tasks</a>
+      <a class="nav-link" href="#analyze"><span class="n">07</span>Analyze</a>
+      <a class="nav-link" href="#implement"><span class="n">08</span>Implement</a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">Closing the Loop</div>
+      <a class="nav-link" href="#converge"><span class="n">09</span>Converge &amp; Checklist</a>
+      <a class="nav-link" href="#customise"><span class="n">10</span>Extensions, Presets, Bundles</a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">Putting It Together</div>
+      <a class="nav-link" href="#walkthrough"><span class="n">11</span>Full Walkthrough</a>
+      <a class="nav-link" href="#cheatsheet"><span class="n">12</span>Cheat Sheet</a>
+      <a class="nav-link" href="#when"><span class="n">13</span>When to Use It</a>
+      <a class="nav-link" href="#next"><span class="n">14</span>Where Next</a>
+    </div>
+  </nav>
+
+  <main class="main">
+    <div class="wrap">
+
+      <!-- HERO -->
+      <div class="titleblock">
+        <span class="eyebrow">github/spec&#8209;kit &middot; open source &middot; MIT licence</span>
+        <h1>Reading The Blueprint</h1>
+        <p class="sub">A newbie's field guide to Spec&#8209;Driven Development, taught the way an apprentice learns a building site: one document at a time, in the order they get signed.</p>
+        <div class="titleblock-meta">
+          <div><span class="k">Format</span><span class="v">Analogy &rarr; Concept &rarr; Code &rarr; Mechanics</span></div>
+          <div><span class="k">Audience</span><span class="v">First contact with Spec&#8209;Kit</span></div>
+          <div><span class="k">Toolkit repo</span><span class="v">github.com/github/spec&#8209;kit</span></div>
+        </div>
+      </div>
+
+      <section id="big-picture" class="phase" style="margin-top:56px;">
+        <p class="lede">
+          Picture two ways to get a house built. In the first, you meet a contractor over coffee, describe roughly what you want, and they start pouring concrete that afternoon. Whatever gets built is whatever they understood from that conversation. You only discover if it matches your idea once the walls are already up, and by then a change means demolition. In the second, an architect turns your conversation into a written brief, drafts blueprints from that brief, breaks the blueprints into trade-by-trade work orders, and only <em>then</em> does anyone pick up a tool. Every document along the way is something you can read, correct, and sign off before the expensive part starts.
+        </p>
+        <p class="lede">
+          <strong>GitHub Spec&#8209;Kit is the second approach, applied to software built with AI coding agents.</strong> The first way has a name in this world too: people call it <em>vibe coding</em>, one prompt in, code out, fix by re-prompting. It's fast and it's fine for a throwaway script. Spec&#8209;Kit exists for the moment a feature is big enough, or risky enough, that you want the blueprint stage back. This guide walks the whole pipeline in the order an apprentice would meet it on site, using a running example from your own world, a data-freshness monitor for a Snowflake pipeline dashboard, so the mechanics have something real to hold onto.
+        </p>
+
+        <table class="xlat">
+          <caption>The Rosetta Stone &mdash; keep this open while you read</caption>
+          <thead>
+            <tr><th>On a building site</th><th>In Spec&#8209;Kit</th><th>What it actually pins down</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="term">Building codes</td><td class="code">constitution.md</td><td>Rules that apply to every project on this site, non-negotiable, set once</td></tr>
+            <tr><td class="term">Client brief</td><td class="code">spec.md</td><td>What the building must do and for whom, never which materials</td></tr>
+            <tr><td class="term">Follow-up call</td><td class="code">/clarify</td><td>Closing the gaps in the brief before anyone drafts a blueprint</td></tr>
+            <tr><td class="term">Blueprints</td><td class="code">plan.md</td><td>The technical how: structure, materials, wiring, checked against code</td></tr>
+            <tr><td class="term">Work orders</td><td class="code">tasks.md</td><td>Trade-by-trade, bounded, checkable units of work</td></tr>
+            <tr><td class="term">Plan review board</td><td class="code">/analyze</td><td>Catching a work order that contradicts the blueprint, before ground breaks</td></tr>
+            <tr><td class="term">Construction</td><td class="code">/implement</td><td>The crew, working the orders, tools finally in hand</td></tr>
+            <tr><td class="term">Final walkthrough</td><td class="code">/converge</td><td>Checking the finished building against the original brief</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- 00 BIG PICTURE DETAIL -->
+      <div class="divider">00 &middot; The Big Picture</div>
+
+      <div class="block analogy">
+        <div class="block-label">&#9737; Analogy</div>
+        <div class="block-body">
+          <p>Two contractors, same house. Contractor A gets a two-line verbal description and starts building the same afternoon. Contractor B insists on a written brief, then blueprints from that brief, then work orders from those blueprints, and only breaks ground once you've signed off on all three. Contractor A is faster on day one. Contractor B is faster overall, because nobody discovers a load-bearing wall in the wrong place after the drywall's up.</p>
+        </div>
+      </div>
+
+      <div class="block concept">
+        <div class="block-label">&#9635; Concept</div>
+        <div class="block-body">
+          <p>Spec&#8209;Driven Development inverts how specifications are usually treated. For most of software history, a spec was scaffolding, written to get everyone aligned, then discarded the moment coding began, and quietly going stale from that point on. Spec&#8209;Kit treats the specification as the <strong>durable, executable source of truth</strong>: the plan and the tasks and the code are all generated from it, and when the feature changes, you change the spec first and regenerate downstream, rather than editing code and letting the spec rot.</p>
+          <p>This matters more, not less, once an AI agent is doing the typing. An agent given one big vague prompt has to guess at everything you didn't say, and it guesses differently every time you ask. An agent given a signed spec, a signed plan, and a signed task list has almost nothing left to guess.</p>
+        </div>
+      </div>
+
+      <div class="block code">
+        <div class="block-label">&#9646; Code &mdash; the contrast in practice</div>
+        <div class="block-body">
+<pre><span class="cmt"># Vibe coding: one prompt, hope for the best</span>
+<span class="cmd">&gt;</span> Build me a dashboard that shows if our Snowflake tables are stale
+
+<span class="cmt"># Spec-Driven Development: staged, reviewable, five short commands</span>
+<span class="cmd">/speckit.constitution</span>  <span class="cmt"># rules for this codebase, set once</span>
+<span class="cmd">/speckit.specify</span>       <span class="cmt"># what "stale" means, for whom, and why</span>
+<span class="cmd">/speckit.plan</span>          <span class="cmt"># which tables, which library, which query</span>
+<span class="cmd">/speckit.tasks</span>         <span class="cmt"># the checklist the agent will work through</span>
+<span class="cmd">/speckit.implement</span>     <span class="cmt"># now, and only now, code gets written</span></pre>
+        </div>
+      </div>
+
+      <div class="block tech">
+        <div class="block-label">&#9673; Technical meaning</div>
+        <div class="block-body">
+          <p>Every phase below produces a real markdown file that lives in your repository alongside the code. Later phases <em>read</em> the earlier files as context before they generate anything, which is what makes the pipeline coherent instead of five disconnected prompts. Because each file is small, readable, and versioned in git, you get a review checkpoint for free at every stage, the same way an architect's client signs off on the brief before paying for blueprints. In practice this is the entire reason teams report far fewer <code>regenerate from scratch</code> cycles with staged specs than with single-shot prompting: the expensive mistake gets caught on a page of markdown, not three hundred lines of generated code.</p>
+        </div>
+      </div>
+
+      <!-- 01 ANATOMY -->
+      <section id="anatomy" class="phase">
+        <div class="phase-head">
+          <div class="phase-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="1.4"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 9h18M9 9v12"/><circle cx="6" cy="6" r="0.6" fill="var(--cyan)"/></svg>
+          </div>
+          <div>
+            <span class="tag">01 &middot; Setup</span>
+            <h2>Anatomy of the Toolkit</h2>
+          </div>
+        </div>
+        <p class="phase-intro">Before any blueprint gets drawn, the architect's practice needs a drafting table, a set of stamped tools, and a site office to file the paperwork in. That's what installing Spec&#8209;Kit actually sets up.</p>
+
+        <div class="block analogy">
+          <div class="block-label">&#9737; Analogy</div>
+          <div class="block-body">
+            <p>The <code>specify</code> CLI is the drafting table itself, the surface everything gets done on. The slash commands (<code>/speckit.constitution</code>, <code>/speckit.plan</code>, and so on) are the individual stamped tools on that table, a T-square for one job, a compass for another. And the <code>.specify/</code> folder that gets created in your project is the site office, the filing cabinet where every official document, template, and rule lives, so any tradesperson who walks onto the site later can find the current building codes without asking around.</p>
+          </div>
+        </div>
+
+        <div class="block concept">
+          <div class="block-label">&#9635; Concept</div>
+          <div class="block-body">
+            <p>Spec&#8209;Kit ships as a Python CLI called <code>specify</code>, installed via <a href="https://docs.astral.sh/uv/" target="_blank" rel="noopener">uv</a>. It's <strong>agent-agnostic</strong>, meaning the same toolkit wires up slash commands for whichever AI coding agent you actually use, Claude Code, GitHub Copilot, Cursor, Gemini CLI, and 30-plus others. You pick your agent once with an <code>--integration</code> flag when you initialise a project, and Spec&#8209;Kit writes the right command files for that agent's format.</p>
+          </div>
+        </div>
+
+        <div class="block code">
+          <div class="block-label">&#9646; Code &mdash; install and initialise</div>
+          <div class="block-body">
+<pre><span class="cmt"># Install the CLI (from PyPI, simplest route)</span>
+<span class="cmd">uv tool install specify-cli</span>
+
+<span class="cmt"># Scaffold a new project, wired up for Claude Code</span>
+<span class="cmd">specify init pipeline-dashboard --integration claude</span>
+<span class="cmd">cd pipeline-dashboard</span>
+
+<span class="cmt"># See every agent this install can wire up</span>
+<span class="cmd">specify integration list</span>
+
+<span class="cmt"># Housekeeping, whenever you come back to it later</span>
+<span class="cmd">specify self check</span>          <span class="out">→ tells you if a newer release exists</span>
+<span class="cmd">specify self upgrade</span>        <span class="out">→ upgrades in place</span></pre>
+          </div>
+        </div>
+
+        <div class="block tech">
+          <div class="block-label">&#9673; Technical meaning</div>
+          <div class="block-body">
+            <p><code>specify init</code> writes two things into your project. First, <strong><code>.specify/</code></strong>, the site office, holding the constitution once you write it, the markdown templates for every phase, and the helper scripts each phase runs behind the scenes. Second, an agent-specific folder (<code>.claude/</code>, <code>.github/</code>, <code>.cursor/</code>, depending on your <code>--integration</code> choice) holding the actual slash-command definitions your agent reads.</p>
+<div class="filetree">pipeline-dashboard/
+├── <span class="hl">.specify/</span>
+│   ├── memory/
+│   │   └── <span class="hl2">constitution.md</span>       <span class="out"># written once you run /speckit.constitution</span>
+│   ├── templates/
+│   │   ├── spec-template.md
+│   │   ├── plan-template.md
+│   │   └── tasks-template.md
+│   └── scripts/                  <span class="out"># the plumbing behind each slash command</span>
+├── specs/                        <span class="out"># one folder per feature, created by /specify</span>
+└── <span class="hl">.claude/</span>
+    └── commands/                  <span class="out"># the /speckit.* commands themselves</span></div>
+            <p style="margin-top:14px;">Nothing in this folder is a black box. Every template is a markdown file you can open and read, which is exactly the point, it's meant to be as legible to you as it is to the agent.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 02 CONSTITUTION -->
+      <section id="constitution" class="phase">
+        <div class="phase-head">
+          <div class="phase-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--brass-soft)" stroke-width="1.4"><path d="M12 3l8 4v2H4V7z"/><path d="M5 9v9M9 9v9M15 9v9M19 9v9"/><path d="M3 20h18"/></svg>
+          </div>
+          <div>
+            <span class="tag">02 &middot; One-time, per project</span>
+            <h2>Constitution</h2>
+          </div>
+        </div>
+        <p class="phase-intro">The rules that apply to every single project ever built on this site, agreed before the first brief is even written.</p>
+
+        <div class="block analogy">
+          <div class="block-label">&#9737; Analogy</div>
+          <div class="block-body">
+            <p>Building codes don't care what you're building. Whether it's a bungalow or a twelve-storey office block, the wiring has to meet the same electrical code and the foundations have to meet the same seismic standard. Nobody re-argues these rules for every new project, they're set once for the whole site and every contractor who works there afterwards has to follow them without being asked.</p>
+          </div>
+        </div>
+
+        <div class="block concept">
+          <div class="block-label">&#9635; Concept</div>
+          <div class="block-body">
+            <p><code>/speckit.constitution</code> is usually the first command you ever run in a project. It captures your non-negotiables, code quality bar, testing standard, performance budget, security rules, in a single governing document that every later phase has to respect. You write it once and revisit it rarely, the same way building codes don't change per project.</p>
+          </div>
+        </div>
+
+        <div class="block code">
+          <div class="block-label">&#9646; Code</div>
+          <div class="block-body">
+<pre><span class="cmd">/speckit.constitution</span> Establish principles for this data pipeline project:
+every pipeline must have automated data-quality checks before promotion
+to production; row-level security is mandatory on any table touching
+customer data; no SQL file may exceed 200 lines without being split;
+credentials are never hardcoded, only key-pair auth or a secrets manager.</pre>
+          </div>
+        </div>
+
+        <div class="block tech">
+          <div class="block-label">&#9673; Technical meaning</div>
+          <div class="block-body">
+            <p>This writes <code>.specify/memory/constitution.md</code>. The word <em>memory</em> in that path is doing real work: every later phase, <code>/plan</code> especially, reads this file before generating anything, and is expected to flag or refuse a plan that violates it. That's what turns it from a document nobody reads into a <strong>living constraint</strong> the agent is actively checking itself against, closer to a linter than a policy PDF.</p>
+            <div class="callout"><strong>Tip:</strong> keep it short and genuinely non-negotiable. If a rule only applies to one feature, it belongs in that feature's spec, not the constitution.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 03 SPECIFY -->
+      <section id="specify" class="phase">
+        <div class="phase-head">
+          <div class="phase-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="1.4"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/><path d="M9.5 12h5M9.5 15h5M9.5 18h3"/></svg>
+          </div>
+          <div>
+            <span class="tag">03 &middot; Per feature</span>
+            <h2>Specify</h2>
+          </div>
+        </div>
+        <p class="phase-intro">Telling the architect what the room needs to do, deliberately before anyone discusses what it's built from.</p>
+
+        <div class="block analogy">
+          <div class="block-label">&#9737; Analogy</div>
+          <div class="block-body">
+            <p>When you brief an architect, you say "three bedrooms, a home office that gets afternoon light, wheelchair access from the driveway." You do not say "use 2x6 studs and copper wiring." That's the builder's job, later, and naming it too early just locks in a decision you weren't qualified to make yet. A good brief is entirely about <em>what</em> and <em>why</em>, never <em>how</em>.</p>
+          </div>
+        </div>
+
+        <div class="block concept">
+          <div class="block-label">&#9635; Concept</div>
+          <div class="block-body">
+            <p><code>/speckit.specify</code> takes a plain description of a feature and turns it into a structured specification: user stories, acceptance criteria, edge cases, explicitly with <strong>no tech stack mentioned</strong>. That constraint is deliberate. Fixing the "how" here would smuggle an implementation decision into a document that's meant to only describe outcomes, and the plan phase exists precisely to make that decision properly, against the constitution.</p>
+          </div>
+        </div>
+
+        <div class="block code">
+          <div class="block-label">&#9646; Code</div>
+          <div class="block-body">
+<pre><span class="cmd">/speckit.specify</span> Build a data-freshness monitor for our Streamlit pipeline
+dashboard. Analysts should see at a glance which source tables haven't
+refreshed within their expected SLA, get a colour-coded status per table,
+and be able to drill into the last five load timestamps for any table
+that's flagged stale.</pre>
+          </div>
+        </div>
+
+        <div class="block tech">
+          <div class="block-label">&#9673; Technical meaning</div>
+          <div class="block-body">
+            <p>Three things happen automatically. Spec&#8209;Kit scans existing specs and assigns the next feature number (<code>001</code>, <code>002</code>, and so on). It creates a semantically-named git branch from your description. And it writes <code>specs/003-data-freshness-monitor/spec.md</code> from the spec template, filled in with your requirements as user stories and acceptance criteria. That folder is where every document about this one feature will live from now on, spec, plan, and tasks side by side.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 04 CLARIFY -->
+      <section id="clarify" class="phase">
+        <div class="phase-head">
+          <div class="phase-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--brass-soft)" stroke-width="1.4"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.6 2.25c-.7.35-1.1.9-1.1 1.75"/><circle cx="12" cy="16.3" r="0.4" fill="var(--brass-soft)"/></svg>
+          </div>
+          <div>
+            <span class="tag">04 &middot; Optional, recommended</span>
+            <h2>Clarify</h2>
+          </div>
+        </div>
+        <p class="phase-intro">The follow-up phone call, before the pencil ever touches the drafting table.</p>
+
+        <div class="block analogy">
+          <div class="block-label">&#9737; Analogy</div>
+          <div class="block-body">
+            <p>The architect reads your brief and calls back. "When you say wheelchair accessible, do you mean full ADA-compliant ramps, or just wide enough doorways?" It's a five-minute call that saves a redrawn blueprint two weeks later. Nobody enjoys being interrupted with these questions, but the alternative is the architect guessing, and guessing wrong at this stage is far cheaper to fix than guessing wrong at the framing stage.</p>
+          </div>
+        </div>
+
+        <div class="block concept">
+          <div class="block-label">&#9635; Concept</div>
+          <div class="block-body">
+            <p><code>/speckit.clarify</code> re-reads the spec looking for underspecified areas and asks you targeted questions about them, rather than silently picking an interpretation. It's optional, but recommended before <code>/plan</code>, precisely because a plan built on a guessed-at ambiguity tends to fail quietly rather than loudly.</p>
+          </div>
+        </div>
+
+        <div class="block code">
+          <div class="block-label">&#9646; Code</div>
+          <div class="block-body">
+<pre><span class="cmd">/speckit.clarify</span>
+
+<span class="out">→ "Stale" isn't fully defined yet. Is a table stale the moment it
+   passes its SLA, or only after an additional grace window? And is
+   the SLA the same fixed value for every table, or configurable
+   per source?"</span></pre>
+          </div>
+        </div>
+
+        <div class="block tech">
+          <div class="block-label">&#9673; Technical meaning</div>
+          <div class="block-body">
+            <p>Answers get written straight back into <code>spec.md</code>, the same file, not a separate one. Nothing new is created here, existing ambiguity is just resolved in place, which is why it's worth running before <code>/plan</code> reads that file and starts making technical decisions based on it.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 05 PLAN -->
+      <section id="plan" class="phase">
+        <div class="phase-head">
+          <div class="phase-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="1.4"><circle cx="12" cy="12" r="8.5"/><path d="M12 12 L16.5 8.5 M12 12 L12 6"/><circle cx="12" cy="12" r="1.1" fill="var(--cyan)"/></svg>
+          </div>
+          <div>
+            <span class="tag">05 &middot; Per feature</span>
+            <h2>Plan</h2>
+          </div>
+        </div>
+        <p class="phase-intro">The structural drawings. Everything the brief left unsaid on purpose now gets decided, on paper, before anyone lifts a tool.</p>
+
+        <div class="block analogy">
+          <div class="block-label">&#9737; Analogy</div>
+          <div class="block-body">
+            <p>Blueprints translate "a home office that gets afternoon light" into an actual wall position, window size, and compass orientation, checked against the building code the whole way. This is where materials get chosen, load paths get calculated, and the electrician's and plumber's drawings get reconciled with each other before either of them shows up on site.</p>
+          </div>
+        </div>
+
+        <div class="block concept">
+          <div class="block-label">&#9635; Concept</div>
+          <div class="block-body">
+            <p><code>/speckit.plan</code> reads the spec and the constitution together and produces the technical <strong>how</strong>: architecture, data model, chosen libraries, file layout. Crucially, it checks itself against the constitution as it goes, so a plan that would hardcode a credential or skip a required data-quality check gets caught here, not three phases later in a code review.</p>
+          </div>
+        </div>
+
+        <div class="block code">
+          <div class="block-label">&#9646; Code</div>
+          <div class="block-body">
+<pre><span class="cmd">/speckit.plan</span> Use the existing Streamlit-in-Snowflake app. Pull last-load
+timestamps from INFORMATION_SCHEMA plus a new pipeline_sla_config table.
+Render status with conditional colour formatting. No new external
+services, and no libraries outside what's already in the app.</pre>
+          </div>
+        </div>
+
+        <div class="block tech">
+          <div class="block-label">&#9673; Technical meaning</div>
+          <div class="block-body">
+            <p>This produces <code>plan.md</code>, and often <code>data-model.md</code> and <code>research.md</code> alongside it, all inside the same <code>specs/003-data-freshness-monitor/</code> folder. The constitutional compliance check happens here specifically because this is the first phase making concrete technical choices, spec.md never touches tech stack, so there's nothing to check it against until now.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 06 TASKS -->
+      <section id="tasks" class="phase">
+        <div class="phase-head">
+          <div class="phase-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="1.4"><rect x="5" y="3" width="14" height="18" rx="1"/><path d="M8.5 8.5l1.4 1.4L12.5 7" /><path d="M8.5 14.5l1.4 1.4L12.5 13" /><path d="M14.5 8.5h2M14.5 14.5h2"/></svg>
+          </div>
+          <div>
+            <span class="tag">06 &middot; Per feature</span>
+            <h2>Tasks</h2>
+          </div>
+        </div>
+        <p class="phase-intro">The general contractor breaking the blueprint into a work order per trade, each one small enough to check off in a single visit.</p>
+
+        <div class="block analogy">
+          <div class="block-label">&#9737; Analogy</div>
+          <div class="block-body">
+            <p>Nobody hands the whole blueprint to the electrician and says "figure out your part." The contractor extracts exactly the electrician's scope into its own work order: which rooms, which circuits, which panel. Each trade gets a bounded, checkable slice, small enough that "is this done" has an unambiguous answer.</p>
+          </div>
+        </div>
+
+        <div class="block concept">
+          <div class="block-label">&#9635; Concept</div>
+          <div class="block-body">
+            <p><code>/speckit.tasks</code> breaks <code>plan.md</code> into an ordered list of atomic tasks, each one touching a small, bounded set of files. Some are marked as safe to run in parallel, others depend on an earlier task finishing first, the same way you can't wire a room before the framing's up.</p>
+          </div>
+        </div>
+
+        <div class="block code">
+          <div class="block-label">&#9646; Code</div>
+          <div class="block-body">
+<pre><span class="cmd">/speckit.tasks</span>
+
+<span class="out">→ tasks.md:
+   1. Add pipeline_sla_config table DDL
+   2. Write freshness-check query against INFORMATION_SCHEMA
+   3. Build the Streamlit colour-coded status component      [P]
+   4. Wire drill-down for last five load timestamps           [P]
+   5. Unit tests for the freshness calculation logic</span></pre>
+          </div>
+        </div>
+
+        <div class="block tech">
+          <div class="block-label">&#9673; Technical meaning</div>
+          <div class="block-body">
+            <p>Each task in <code>tasks.md</code> references the specific files and functions from <code>plan.md</code> it touches, which is what keeps <code>/implement</code> from wandering outside its lane later. Tasks tagged <code>[P]</code> above have no dependency on each other and can, in principle, run concurrently, mirroring how the colour-coding UI and the drill-down UI don't need to wait on one another once the underlying query exists.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 07 ANALYZE -->
+      <section id="analyze" class="phase">
+        <div class="phase-head">
+          <div class="phase-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--brass-soft)" stroke-width="1.4"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.3 15.3L21 21"/></svg>
+          </div>
+          <div>
+            <span class="tag">07 &middot; Optional, recommended</span>
+            <h2>Analyze</h2>
+          </div>
+        </div>
+        <p class="phase-intro">The plan review board, cross-checking the blueprint against every work order before the first shovel goes in.</p>
+
+        <div class="block analogy">
+          <div class="block-label">&#9737; Analogy</div>
+          <div class="block-body">
+            <p>Before a permit is issued, a reviewer lays the blueprints and the trade work orders side by side and looks for contradictions, a wall the electrician's plan runs a circuit through that the structural plan shows as load-bearing, say. Catching that on paper costs an afternoon. Catching it after the wall's half-built costs a demolition.</p>
+          </div>
+        </div>
+
+        <div class="block concept">
+          <div class="block-label">&#9635; Concept</div>
+          <div class="block-body">
+            <p><code>/speckit.analyze</code> is a read-only pass across spec, plan, and tasks together, looking for duplication, coverage gaps, and outright contradictions between the three. It changes nothing itself, it's purely a quality gate, meant to run after <code>/tasks</code> and before <code>/implement</code>.</p>
+          </div>
+        </div>
+
+        <div class="block code">
+          <div class="block-label">&#9646; Code</div>
+          <div class="block-body">
+<pre><span class="cmd">/speckit.analyze</span>
+
+<span class="out">→ Task 3 references a "status_colour" field that plan.md never
+   defines. Spec.md's acceptance criteria don't mention a refresh
+   interval for the dashboard itself, only for source tables.</span></pre>
+          </div>
+        </div>
+
+        <div class="block tech">
+          <div class="block-label">&#9673; Technical meaning</div>
+          <div class="block-body">
+            <p>No files are written or changed. You get a report, you go fix whichever upstream document has the gap, usually a quick edit to <code>plan.md</code> or <code>tasks.md</code>, and only then move on. Skipping this step doesn't break anything immediately, it just means any inconsistency surfaces later, inside generated code, where it's more expensive to trace back to its source.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 08 IMPLEMENT -->
+      <section id="implement" class="phase">
+        <div class="phase-head">
+          <div class="phase-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="1.4"><path d="M14.5 3.5l6 6-2 2-6-6z"/><path d="M13 6l-9 9v3h3l9-9"/><path d="M4.5 19.5l-1-1"/></svg>
+          </div>
+          <div>
+            <span class="tag">08 &middot; Per feature</span>
+            <h2>Implement</h2>
+          </div>
+        </div>
+        <p class="phase-intro">Ground finally breaks. The crew works the orders in sequence, tools in hand at last.</p>
+
+        <div class="block analogy">
+          <div class="block-label">&#9737; Analogy</div>
+          <div class="block-body">
+            <p>Everything before this point was paper. This is the only phase where anyone actually picks up a hammer. Because the work orders are specific and sequenced, the crew doesn't stand around wondering what to build next, they read the next order, build it, and the site inspector checks each milestone as it's completed rather than only at the very end.</p>
+          </div>
+        </div>
+
+        <div class="block concept">
+          <div class="block-label">&#9635; Concept</div>
+          <div class="block-body">
+            <p><code>/speckit.implement</code> works through <code>tasks.md</code> in order, writing the actual code for each task against the plan. Practitioners who've run this on larger features report two habits worth adopting early: validate each phase's output before moving to the next rather than letting errors compound, and start a fresh context window per implementation phase on anything sizeable, since a single long session accumulates clutter that quietly degrades output quality.</p>
+          </div>
+        </div>
+
+        <div class="block code">
+          <div class="block-label">&#9646; Code</div>
+          <div class="block-body">
+<pre><span class="cmd">/speckit.implement</span>
+
+<span class="out">→ Task 1 done: pipeline_sla_config DDL added and applied.
+   Task 2 done: freshness-check query written, tested against
+   three sample tables.
+   Task 3 in progress: Streamlit status component...</span></pre>
+          </div>
+        </div>
+
+        <div class="block tech">
+          <div class="block-label">&#9673; Technical meaning</div>
+          <div class="block-body">
+            <p>Because every task already names its files and its dependency order, the agent isn't deciding architecture here, that decision was made and reviewed back at <code>/plan</code>. It's executing a checklist, which is exactly why this phase is faster and more predictable than a single unstructured prompt asking for the whole feature at once.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 09 CONVERGE / CHECKLIST -->
+      <section id="converge" class="phase">
+        <div class="phase-head">
+          <div class="phase-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--brass-soft)" stroke-width="1.4"><path d="M4 12l5 5L20 6"/></svg>
+          </div>
+          <div>
+            <span class="tag">09 &middot; After implement</span>
+            <h2>Converge &amp; Checklist</h2>
+          </div>
+        </div>
+        <p class="phase-intro">Two different kinds of final inspection, one before you build, one after.</p>
+
+        <div class="grid2">
+          <div class="block analogy" style="margin-bottom:0;">
+            <div class="block-label">&#9737; Checklist</div>
+            <div class="block-body">
+              <p><code>/speckit.checklist</code> is the site inspector's own checklist, generated to validate that your spec itself is complete, unambiguous, and internally consistent, before you've built anything at all. Think of it as unit tests written for English rather than code.</p>
+            </div>
+          </div>
+          <div class="block analogy" style="margin-bottom:0;">
+            <div class="block-label">&#9737; Converge</div>
+            <div class="block-body">
+              <p><code>/speckit.converge</code> is the final walkthrough, after implementation, comparing the finished building against the original brief and appending anything still missing as new tasks. You run <code>/implement</code> then <code>/converge</code> in a loop until convergence is reported.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="block code" style="margin-top:14px;">
+          <div class="block-label">&#9646; Code</div>
+          <div class="block-body">
+<pre><span class="cmd">/speckit.checklist</span>   <span class="cmt"># before implementing, sanity-check the spec itself</span>
+<span class="cmd">/speckit.implement</span>
+<span class="cmd">/speckit.converge</span>   <span class="cmt"># after implementing, check the build against the spec</span>
+<span class="out">→ Converged.</span>  <span class="cmt"># or: appends the gaps as new tasks, loop back to /implement</span></pre>
+          </div>
+        </div>
+
+        <div class="block tech">
+          <div class="block-label">&#9673; Technical meaning</div>
+          <div class="block-body">
+            <p>One more command worth knowing here: <code>/speckit.taskstoissues</code> converts <code>tasks.md</code> into actual GitHub issues, the equivalent of turning internal work orders into tracked subcontracts your whole team can see progress on, useful the moment a feature stops being a solo effort.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 10 CUSTOMISE -->
+      <section id="customise" class="phase">
+        <div class="phase-head">
+          <div class="phase-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="1.4"><rect x="3" y="7" width="18" height="12" rx="1"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          </div>
+          <div>
+            <span class="tag">10 &middot; When the defaults aren't enough</span>
+            <h2>Extensions, Presets &amp; Bundles</h2>
+          </div>
+        </div>
+        <p class="phase-intro">Three different ways to make the practice your own, and they're not interchangeable.</p>
+
+        <div class="block analogy">
+          <div class="block-label">&#9737; Analogy</div>
+          <div class="block-body">
+            <p><strong>Extensions</strong> bring in a specialist subcontractor for something the core crew simply doesn't do, a solar panel installer added to a build that never needed one before. They add a new capability that wasn't there. <strong>Presets</strong> are a regional building code amendment: California's earthquake bracing rules and Florida's hurricane strapping rules are both amendments to the same base code, changing <em>how</em> existing work gets done, not adding anything new. <strong>Bundles</strong> are a pre-staffed crew-for-hire package, book "the kitchen remodel crew" and the electrician, plumber, and tiler all arrive together, versioned and ready as one booking.</p>
+          </div>
+        </div>
+
+        <div class="block concept">
+          <div class="block-label">&#9635; Concept</div>
+          <div class="block-body">
+            <p>Extensions add new commands and templates, integrating with external tools like Jira, or adding entirely new workflow phases. Presets override the format of existing artefacts, spec, plan, or task templates, to enforce organisational or regulatory standards without changing what the pipeline does. Bundles package a curated set of extensions and presets into one role-oriented, versioned install, so a whole team persona can be provisioned in a single command.</p>
+          </div>
+        </div>
+
+        <div class="block code">
+          <div class="block-label">&#9646; Code</div>
+          <div class="block-body">
+<pre><span class="cmt"># Extensions: add a capability</span>
+<span class="cmd">specify extension search</span>
+<span class="cmd">specify extension add jira-sync</span>
+
+<span class="cmt"># Presets: change how existing artefacts are formatted</span>
+<span class="cmd">specify preset search</span>
+<span class="cmd">specify preset add regulatory-traceability</span>
+
+<span class="cmt"># Bundles: provision a whole role-based setup at once</span>
+<span class="cmd">specify bundle search</span>
+<span class="cmd">specify bundle install security-researcher</span></pre>
+          </div>
+        </div>
+
+        <div class="block tech">
+          <div class="block-label">&#9673; Technical meaning</div>
+          <div class="block-body">
+            <p>When more than one source tries to define the same template, a fixed priority stack resolves the conflict, project-local overrides win first, then presets, then extensions, and core defaults lose every tie:</p>
+            <div class="stackline">
+              <div class="row"><span class="p">1 (highest)</span><span>Project-local overrides &mdash; <code>.specify/templates/overrides/</code></span></div>
+              <div class="row"><span class="p">2</span><span>Presets &mdash; <code>.specify/presets/templates/</code></span></div>
+              <div class="row"><span class="p">3</span><span>Extensions &mdash; <code>.specify/extensions/templates/</code></span></div>
+              <div class="row"><span class="p">4 (lowest)</span><span>Spec&#8209;Kit core defaults &mdash; <code>.specify/templates/</code></span></div>
+            </div>
+            <p>Templates resolve this way at <em>runtime</em>, every time a command runs. Command files themselves, by contrast, are written once at <em>install</em> time, when you run <code>extension add</code> or <code>preset add</code>.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 11 WALKTHROUGH -->
+      <section id="walkthrough" class="phase">
+        <div class="divider">11 &middot; Putting It Together</div>
+        <div class="phase-head">
+          <h2 style="font-size:30px;">The Whole Site, Start to Finish</h2>
+        </div>
+        <p class="phase-intro">Every phase above, run back to back, on the data-freshness monitor feature that's been threaded through this guide.</p>
+
+        <div class="block" style="border-color:var(--line); background: var(--panel);">
+          <div class="walkthrough-step">
+            <span class="num">01</span>
+            <div class="body">
+              <h4>Set the ground rules, once per project</h4>
+              <p>Not per feature. This ran the first time Spec&#8209;Kit touched this repo.</p>
+              <code>/speckit.constitution</code>
+            </div>
+          </div>
+          <div class="walkthrough-step">
+            <span class="num">02</span>
+            <div class="body">
+              <h4>Describe the feature, no tech stack yet</h4>
+              <p>Creates <code>specs/003-data-freshness-monitor/spec.md</code> and a matching branch.</p>
+              <code>/speckit.specify</code>
+            </div>
+          </div>
+          <div class="walkthrough-step">
+            <span class="num">03</span>
+            <div class="body">
+              <h4>Close the gaps before anyone plans around them</h4>
+              <p>Resolved what "stale" means and whether the SLA is fixed or configurable.</p>
+              <code>/speckit.clarify</code>
+            </div>
+          </div>
+          <div class="walkthrough-step">
+            <span class="num">04</span>
+            <div class="body">
+              <h4>Decide the technical how, checked against the constitution</h4>
+              <p>Streamlit-in-Snowflake, <code>INFORMATION_SCHEMA</code>, a new config table, no new services.</p>
+              <code>/speckit.plan</code>
+            </div>
+          </div>
+          <div class="walkthrough-step">
+            <span class="num">05</span>
+            <div class="body">
+              <h4>Break the plan into a checkable work order</h4>
+              <p>Five tasks, two of them safe to build in parallel.</p>
+              <code>/speckit.tasks</code>
+            </div>
+          </div>
+          <div class="walkthrough-step">
+            <span class="num">06</span>
+            <div class="body">
+              <h4>Cross-check spec, plan and tasks against each other</h4>
+              <p>Caught a field referenced in tasks.md that plan.md never defined.</p>
+              <code>/speckit.analyze</code>
+            </div>
+          </div>
+          <div class="walkthrough-step">
+            <span class="num">07</span>
+            <div class="body">
+              <h4>Build it, task by task</h4>
+              <p>Only now does actual code get written.</p>
+              <code>/speckit.implement</code>
+            </div>
+          </div>
+          <div class="walkthrough-step">
+            <span class="num">08</span>
+            <div class="body">
+              <h4>Walk the finished feature against the original brief</h4>
+              <p>Loop back to <code>/implement</code> if anything's still missing, otherwise done.</p>
+              <code>/speckit.converge</code>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 12 CHEAT SHEET -->
+      <section id="cheatsheet" class="phase">
+        <div class="phase-head">
+          <h2 style="font-size:30px;">Command Reference</h2>
+        </div>
+        <table class="cheatsheet">
+          <thead><tr><th>Command</th><th>Site-office name</th><th>Produces</th></tr></thead>
+          <tbody>
+            <tr><td class="cmd">/speckit.constitution</td><td class="an">Building codes</td><td><code>constitution.md</code></td></tr>
+            <tr><td class="cmd">/speckit.specify</td><td class="an">Client brief</td><td><code>spec.md</code>, a new branch</td></tr>
+            <tr><td class="cmd">/speckit.clarify</td><td class="an">Follow-up call</td><td>Updated <code>spec.md</code></td></tr>
+            <tr><td class="cmd">/speckit.plan</td><td class="an">Blueprints</td><td><code>plan.md</code>, <code>data-model.md</code></td></tr>
+            <tr><td class="cmd">/speckit.tasks</td><td class="an">Work orders</td><td><code>tasks.md</code></td></tr>
+            <tr><td class="cmd">/speckit.analyze</td><td class="an">Plan review board</td><td>A consistency report, no files changed</td></tr>
+            <tr><td class="cmd">/speckit.checklist</td><td class="an">Inspector's checklist</td><td>A quality checklist for the spec itself</td></tr>
+            <tr><td class="cmd">/speckit.implement</td><td class="an">Construction crew</td><td>Working code</td></tr>
+            <tr><td class="cmd">/speckit.converge</td><td class="an">Final walkthrough</td><td>Remaining-work tasks, or "Converged"</td></tr>
+            <tr><td class="cmd">/speckit.taskstoissues</td><td class="an">Issuing subcontracts</td><td>GitHub issues from <code>tasks.md</code></td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- 13 WHEN TO USE -->
+      <section id="when" class="phase">
+        <div class="phase-head">
+          <h2 style="font-size:30px;">When To Actually Reach For This</h2>
+        </div>
+        <div class="block analogy">
+          <div class="block-label">&#9737; Honest caveats</div>
+          <div class="block-body">
+            <p>The full pipeline is genuinely heavier than prompting an agent directly, one benchmark put the same feature at roughly nine times longer end to end through Spec&#8209;Kit than through iterative prompting. That overhead earns its keep on large, high-risk, or regulated features where a reviewable paper trail matters more than raw speed, exactly the kind of work you'd expect in a BFSI data platform. For a quick script or a one-off fix, plain prompting is still faster and that's fine, Spec&#8209;Kit doesn't replace judgement about when ceremony is worth it.</p>
+            <p>The project itself describes its goals as experimental, so expect the CLI surface and command names to keep evolving, pin a release tag if you want stability in something that matters. Worth knowing too: one of the original developers moved on to Anthropic in late 2025, the project remains active but it's a detail worth keeping an eye on. If the full pipeline feels heavier than a given feature warrants, lighter alternatives exist worth knowing about, OpenSpec for brownfield changes, GSD for teams fully committed to Claude Code.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 14 WHERE NEXT -->
+      <section id="next" class="phase">
+        <div class="phase-head">
+          <h2 style="font-size:30px;">Where This Guide Hands You Off</h2>
+        </div>
+        <div class="block concept">
+          <div class="block-body">
+            <p>This guide covers the mechanics, what each phase does and why it's shaped that way. Two things it deliberately doesn't replace: the official <code>spec-driven.md</code> in the repo, which goes deeper into the reasoning behind the methodology than any analogy can, and actually running the pipeline yourself on something small.</p>
+            <ul>
+              <li>Microsoft Learn's two free modules, greenfield first, then the enterprise/brownfield one, for structured hands-on practice</li>
+              <li><code>spec-driven.md</code> and the docs site at <code>github.github.io/spec-kit</code> for the full reference</li>
+              <li>Install the CLI and run the eight-step walkthrough above against one real, small feature, that's where the analogies stop being necessary</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <footer>drawn for a first read of github/spec&#8209;kit &middot; verify command syntax against the current release before relying on it</footer>
+
+    </div>
+  </main>
+</div>
+
+<script>
+  const links = document.querySelectorAll('.nav-link');
+  const sections = Array.from(links).map(l => document.querySelector(l.getAttribute('href'))).filter(Boolean);
+
+  function onScroll(){
+    let current = sections[0];
+    const y = window.scrollY + 120;
+    for (const s of sections){
+      if (s.offsetTop <= y) current = s;
+    }
+    links.forEach(l => {
+      l.classList.toggle('active', l.getAttribute('href') === '#' + current.id);
+    });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+</script>
+
+</body>
+</html>
